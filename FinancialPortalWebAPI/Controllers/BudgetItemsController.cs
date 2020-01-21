@@ -28,17 +28,17 @@ namespace FinancialPortalWebAPI.Controllers
         /// <summary>
         /// Creates a BudgetItem for a specific BudgetCategory
         /// </summary>
-        /// <param name="houseId">FK pointing to Household</param>
-        /// <param name="ownerId">FK pointing to Owner User</param>
-        /// <param name="name">Name of Budget Category</param>
-        /// <param name="targetAmount">Allocated amount for the Budget Category</param>
+        /// <param name="budgetId">FK pointing to Budget Category</param>
+        /// <param name="name">Name of BudgetItem</param>
+        /// <param name="description">Description of BudgetItem</param>
+        /// <param name="targetAmount">Allocated amount for the BudgetItem</param>
         /// <returns>PK of BudgetItem</returns>
 
         [ResponseType(typeof(BudgetItem))]
         [HttpPost, Route("AddBudgetItem")]
-        public IHttpActionResult AddBudgetItem(int houseId, string ownerId, string name, float targetAmount)
+        public IHttpActionResult AddBudgetItem(int budgetId, string name, string description, float targetAmount)
         {
-            return Ok(db.AddBudgetItem(houseId, ownerId, name, targetAmount));
+            return Ok(db.AddBudgetItem(budgetId, name, description, targetAmount));
 
         }
 
@@ -54,5 +54,18 @@ namespace FinancialPortalWebAPI.Controllers
             return await db.GetBudgetItem(id);
 
         }
+
+        /// <summary>
+        /// Removes the Pk of BudgetItem in the Database
+        /// </summary>
+        /// <param name="id">Pk of BudgetItem to remove</param>
+        /// <returns></returns>
+        [HttpDelete, Route("DeleteBudgetItem")]
+        public IHttpActionResult DeleteBudgetItem(int id)
+        {
+            return Ok(db.DeleteBudgetItem(id));
+
+        }
     }
+
 }

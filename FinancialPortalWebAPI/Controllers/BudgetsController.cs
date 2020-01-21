@@ -1,9 +1,6 @@
 ﻿using FinancialPortalWebAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -42,6 +39,7 @@ namespace FinancialPortalWebAPI.Controllers
 
         }
 
+     
         /// <summary>
         ///  Retrieves all data of specific Budget Category
         /// </summary>
@@ -54,6 +52,31 @@ namespace FinancialPortalWebAPI.Controllers
             return await db.GetBudget(id);
 
         }
+        /// <summary>
+        /// Updates the name of Budget Category
+        /// </summary>
+        /// <param name="id">PK of Budget Category</param>
+        /// <param name="name">Name of Budget Category</param>
+        /// <returns></returns>
+        [ResponseType(typeof(Budget))]
+        [HttpPut, Route("UpdateBudgetCategory")]
+        public IHttpActionResult UpdateBudgetCategory(int id, string name)
+        {
+            return Ok(db.UpdateBudgetCategory(id, name));
+
+        }
+        /// <summary>
+        /// Removes the Pk of Budget Category in the Database
+        /// </summary>
+        /// <param name="id">Pk of Budget Category to remove</param>
+        /// <returns></returns>
+        [HttpDelete, Route("DeleteBudget")]
+        public IHttpActionResult DeleteBudget(int id)
+        {
+            return Ok(db.DeleteBudget(id));
+
+        }
+
     }
 }
 

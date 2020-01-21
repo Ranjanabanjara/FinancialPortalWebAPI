@@ -17,7 +17,7 @@ namespace FinancialPortalWebAPI.Models
             public int BankAccountId { get; set; }
             public string OwnerId { get; set; }
             public int? BudgetItemId { get; set; }
-            [EnumDataType(typeof(AccountType))]
+            [EnumDataType(typeof(TransactionType))]
             [JsonConverter(typeof(StringEnumConverter))]
             public TransType TransactionType { get; set; }
             public double Amount { get; set; }

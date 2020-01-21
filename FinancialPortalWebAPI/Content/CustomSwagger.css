@@ -1,0 +1,47 @@
+﻿.swagger-section #header {
+    background-color: #ff580f;
+}
+.swagger-section #header a#logo{
+    background: transparent url(/Images/pig2.png) no-repeat left center;
+    background-size: 15%;
+}
+
+.swagger-section .swagger-ui-wrap .info_title {
+    color: #ff580f;
+    font-weight: bolder;
+    text-align: center;
+    font-size: x-large;
+  
+}
+
+
+.swagger-section .swagger-ui-wrap .info_title {
+    animation-duration: 5s;
+    animation-name: slidein;
+}
+
+@keyframes slidein{
+    from{
+        margin-left : 0%;
+        width: 100%;
+    }
+
+    to{
+        margin-left: 0%;
+        width:100%;
+    }
+}
+
+.footer h4 {
+    color: #ff580f !important;
+    font-style: oblique;
+}
+
+.swagger-section .swagger-ui-wrap ul#resources li.resource div.heading h2 a,
+.swagger-section .swagger-ui-wrap ul#resources li.resource div.heading ul.options li a
+{
+    color: #192d8e;
+    font-weight: 700;
+    font-size: larger;
+    
+}

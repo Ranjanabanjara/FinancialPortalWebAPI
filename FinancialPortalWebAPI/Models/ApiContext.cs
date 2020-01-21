@@ -2,7 +2,8 @@
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-
+using static FinancialPortalWebAPI.Enumerations.AccountType;
+using static FinancialPortalWebAPI.Enumerations.TransactionType;
 
 namespace FinancialPortalWebAPI.Models
 {
@@ -24,6 +25,10 @@ namespace FinancialPortalWebAPI.Models
             return new ApiContext();
         }
 
+        public async Task<List<Users>> GetAllUsersInformation()
+        {
+            return await Database.SqlQuery<Users>("GetAllUsersInformation").ToListAsync();
+        }
         /// <summary>
         /// Retrieves all Households in Database
         /// </summary>
@@ -102,15 +107,16 @@ namespace FinancialPortalWebAPI.Models
         /// <param name="startingBalance">Balance to start</param>
         /// <param name="lowBalanceThreshold">Alert Level balance</param>
         /// <returns>PK of BankAccount</returns>
-        public int AddBankAccount(int houseId, int accountType, string ownerId, string name, float startingBalance, float lowBalanceThreshold)
+        public int AddBankAccount(int houseId, AccType accountType, string ownerId, string name, float startingBalance, float lowBalanceThreshold)
         {
+            var emumAccountType = (int)accountType;
             return Database.ExecuteSqlCommand("AddBankAccount @houseId, @accountType, @ownerId, @name, @startingBalance, @lowBalanceThreshold",
                 new SqlParameter("houseId", houseId),
-                 new SqlParameter("accountType", accountType ),
+                 new SqlParameter("accountType", emumAccountType ),
                   new SqlParameter("ownerId", ownerId ),
                    new SqlParameter("name", name),
-                   new SqlParameter("lowBalanceThreshold", startingBalance ),
-                new SqlParameter("startingBalance", lowBalanceThreshold));
+                   new SqlParameter("startingBalance", startingBalance ),
+                new SqlParameter("lowBalanceThreshold", lowBalanceThreshold));
 
         }
 
@@ -123,6 +129,20 @@ namespace FinancialPortalWebAPI.Models
         public async Task<BankAccount> GetBankAccount(int id)
         {
             return await Database.SqlQuery<BankAccount>("GetBankAccount @id", new SqlParameter("id", id)).FirstOrDefaultAsync();
+
+        }
+
+
+        /// <summary>
+        /// Removes a BankAccount
+        /// </summary>
+        /// <param name="id">PK of BankAccount to remove</param>
+        /// <returns></returns>
+        public int DeleteBankAccount(int id)
+        {
+            return Database.ExecuteSqlCommand("DeleteBankAccount @id",
+                new SqlParameter("id", id));
+
 
         }
 
@@ -170,6 +190,34 @@ namespace FinancialPortalWebAPI.Models
         }
 
         /// <summary>
+        /// Updates the Budget Category Name
+        /// </summary>
+        /// <param name="id">PK of Budget Category </param>
+        /// <param name="name">Name of Budget Category</param>
+        /// <returns></returns>
+        public int UpdateBudgetCategory(int id, string name)
+        {
+            return Database.ExecuteSqlCommand("UpdateBudgetCategory @id, @name",
+                new SqlParameter("id", id),
+                new SqlParameter("name", name)
+                );
+
+        }
+
+        /// <summary>
+        /// Removes a Budget Category in database
+        /// </summary>
+        /// <param name="id">PK of Budget Category to remove</param>
+        /// <returns></returns>
+        public int DeleteBudget(int id)
+        {
+            return Database.ExecuteSqlCommand("DeleteBudget @id",
+                new SqlParameter("id", id));
+
+
+        }
+
+        /// <summary>
         /// Retrieves all BudgetItems for a specific Budget Category
         /// </summary>
         /// <param name="budgetId">Fk Pointing to Budget Category</param>
@@ -177,7 +225,7 @@ namespace FinancialPortalWebAPI.Models
         public async Task<List<BudgetItem>> GetAllBudgetItems(int budgetId)
         {
             return await Database.SqlQuery<BudgetItem>("GetAllBudgetItems @budgetId",
-                new SqlParameter("houseId", budgetId)).ToListAsync();
+                new SqlParameter("budgetId", budgetId)).ToListAsync();
         }
 
 
@@ -211,6 +259,18 @@ namespace FinancialPortalWebAPI.Models
 
         }
 
+        /// <summary>
+        /// Removes a BudgetItem in database
+        /// </summary>
+        /// <param name="id">PK of BudgetItem to remove</param>
+        /// <returns></returns>
+        public int DeleteBudgetItem(int id)
+        {
+            return Database.ExecuteSqlCommand("DeleteBudgetItem @id",
+                new SqlParameter("id", id));
+
+
+        }
 
         /// <summary>
         /// Retrieves all data of specific Transaction 
@@ -240,23 +300,34 @@ namespace FinancialPortalWebAPI.Models
         /// </summary>
         /// <param name="bankAccountId">FK Pointing to BanAccount</param>
         /// <param name="ownerId">FK pointing to Owner User</param>
-        /// <param name="BudgetItemId">FK pointing to BudgetItem</param>
+        /// <param name="budgetItemId">FK pointing to BudgetItem</param>
         /// <param name="transactionType">Enum for Transaction Type</param>
         /// <param name="amount">Amount of Transaction</param>
         /// <param name="memo">Transaction information</param>
         /// <returns>PK of New Transaction</returns>
-        public int AddTransaction(int bankAccountId, string ownerId, int BudgetItemId, int transactionType, float amount, string memo)
+        public int AddTransaction(int bankAccountId, string ownerId, int budgetItemId, TransType transactionType, float amount, string memo)
         {
             return Database.ExecuteSqlCommand("AddBudgetItem @bankAccountId, @ownerId , @BudgetItemId, @transactionType, @amount, @memo",
                 new SqlParameter("bankAccountId", bankAccountId),
                 new SqlParameter("ownerId", ownerId),
-                new SqlParameter("BudgetItemId", BudgetItemId),
-                new SqlParameter("transactionType", transactionType),
+                new SqlParameter("BudgetItemId", budgetItemId),
+                new SqlParameter("transactionType", (int)transactionType),
                 new SqlParameter("amount", amount),
                  new SqlParameter("memo", memo));
         }
-     
 
+        /// <summary>
+        /// Removes a Transaction in database
+        /// </summary>
+        /// <param name="id">PK of Transaction to remove</param>
+        /// <returns></returns>
+        public int DeleteTransaction(int id)
+        {
+            return Database.ExecuteSqlCommand("DeleteTransaction @id",
+                new SqlParameter("id", id));
+
+
+        }
     }
 
 

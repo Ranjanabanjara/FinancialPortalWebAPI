@@ -1,4 +1,5 @@
-﻿using FinancialPortalWebAPI.Models;
+﻿using FinancialPortalWebAPI.Enumerations;
+using FinancialPortalWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using static FinancialPortalWebAPI.Enumerations.AccountType;
 
 namespace FinancialPortalWebAPI.Controllers
 {
@@ -38,7 +40,7 @@ namespace FinancialPortalWebAPI.Controllers
         /// <returns>PK of New BankAccount</returns>
         [ResponseType(typeof(BankAccount))]
         [HttpPost, Route("AddBankAccount")]
-        public IHttpActionResult AddBankAccount(int houseId, int accountType, string ownerId, string name, float startingBalance, float lowBalanceThreshold)
+        public IHttpActionResult AddBankAccount(int houseId, AccType accountType, string ownerId, string name, float startingBalance, float lowBalanceThreshold)
         {
             return Ok(db.AddBankAccount(houseId, accountType, ownerId, name, startingBalance, lowBalanceThreshold));
 
@@ -55,6 +57,18 @@ namespace FinancialPortalWebAPI.Controllers
         public async Task<BankAccount> GetBankAccount(int id)
         {
             return await db.GetBankAccount(id);
+
+        }
+
+        /// <summary>
+        /// Removes the Pk of BankAccount 
+        /// </summary>
+        /// <param name="id">Pk of BankAccount to remove</param>
+        /// <returns></returns>
+        [HttpDelete, Route("DeleteBankAccount")]
+        public IHttpActionResult DeleteBankAccount(int id)
+        {
+            return Ok(db.DeleteBankAccount(id));
 
         }
     }
